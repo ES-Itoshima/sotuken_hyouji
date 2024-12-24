@@ -1,35 +1,47 @@
 <template>
   <div class="image-gallery">
-    <h1>画像ギャラリー</h1>
+    <div class="gallery-container">
+      <!-- 左側: 検索フォームと画像ギャラリー -->
+      <div class="gallery-left">
+        <h1>画像ギャラリー</h1>
 
-    <!-- タグ検索フォーム -->
-    <div class="search-form">
-      <label>レベル1:</label>
-      <select v-model="searchTags.level1" @change="onLevel1Change">
-        <option value="">-- 全て --</option>
-        <option v-for="tag in level1Tags" :key="tag" :value="tag">{{ tag }}</option>
-      </select>
+        <!-- タグ検索フォーム -->
+        <div class="search-form">
+          <label>レベル1:</label>
+          <select v-model="searchTags.level1" @change="onLevel1Change">
+            <option value="">-- 全て --</option>
+            <option v-for="tag in level1Tags" :key="tag" :value="tag">{{ tag }}</option>
+          </select>
 
-      <label>レベル2:</label>
-      <select v-model="searchTags.level2" @change="onLevel2Change">
-        <option value="">-- 全て --</option>
-        <option v-for="tag in level2Tags" :key="tag" :value="tag">{{ tag }}</option>
-      </select>
+          <label>レベル2:</label>
+          <select v-model="searchTags.level2" @change="onLevel2Change">
+            <option value="">-- 全て --</option>
+            <option v-for="tag in level2Tags" :key="tag" :value="tag">{{ tag }}</option>
+          </select>
 
-      <label>レベル3:</label>
-      <select v-model="searchTags.level3" @change="fetchImages">
-        <option value="">-- 全て --</option>
-        <option v-for="tag in level3Tags" :key="tag" :value="tag">{{ tag }}</option>
-      </select>
-    </div>
+          <label>レベル3:</label>
+          <select v-model="searchTags.level3" @change="fetchImages">
+            <option value="">-- 全て --</option>
+            <option v-for="tag in level3Tags" :key="tag" :value="tag">{{ tag }}</option>
+          </select>
+        </div>
 
-    <!-- 画像表示 -->
-    <div class="gallery">
-      <div v-for="image in images" :key="image.name" class="gallery-item">
-        <img :src="image.url" :alt="image.name" />
-        <p>{{ image.name }}</p>
-        <p>{{ image.tags.level1 }} > {{ image.tags.level2 }} > {{ image.tags.level3 }}</p>
+        <!-- 画像表示 -->
+        <div class="gallery">
+          <div v-for="image in images" :key="image.name" class="gallery-item">
+            <img :src="image.url" :alt="image.name" />
+            <p>{{ image.name }}</p>
+            <p>{{ image.tags.level1 }} > {{ image.tags.level2 }} > {{ image.tags.level3 }}</p>
+          </div>
+        </div>
       </div>
+
+      <!-- 右側: 現在のタグ構造 -->
+      <div class="gallery-right">
+  <h2>現在のタグ構造</h2>
+  <div class="tag-markdown" v-html="generateTagMarkdown(tagHierarchy, searchTags)"></div>
+</div>
+
     </div>
   </div>
 </template>
@@ -57,6 +69,31 @@ export default {
     await this.fetchImages();
   },
   methods: {
+    generateTagMarkdown(hierarchy, selectedTags) {
+    const buildMarkdown = (level, prefix = '') => {
+      let markdown = '';
+      for (const key in level) {
+        const isSelected =
+          (prefix === '' && key === selectedTags.level1) ||
+          (prefix.includes('│') && key === selectedTags.level2) ||
+          (prefix.includes('├') && level[key].includes(selectedTags.level3));
+
+        const line = `${prefix}<span class="${isSelected ? 'selected-tag' : ''}">${key}</span>`;
+        markdown += `${line}\n`;
+
+        if (typeof level[key] === 'object' && !Array.isArray(level[key])) {
+          markdown += buildMarkdown(level[key], `${prefix}│   `);
+        } else if (Array.isArray(level[key])) {
+          level[key].forEach((subTag) => {
+            const subSelected = subTag === selectedTags.level3;
+            markdown += `${prefix}├── <span class="${subSelected ? 'selected-tag' : ''}">${subTag}</span>\n`;
+          });
+        }
+      }
+      return markdown;
+    };
+    return buildMarkdown(hierarchy);
+  },
     async fetchTagHierarchy() {
       try {
         const response = await axios.get('http://localhost:3000/tags/hierarchy');
@@ -99,12 +136,48 @@ export default {
 </script>
 
 <style>
+
+.tag-markdown {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 10px;
+
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.selected-tag {
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4caf50;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
 .image-gallery {
   padding: 20px;
 }
 
+.gallery-container {
+  display: flex;
+  gap: 20px;
+}
+
+.gallery-left {
+  flex: 3;
+}
+
+.gallery-right {
+  flex: 1;
+  text-align: left;
+  border-left: 1px solid #ddd;
+  padding-left: 20px;
+}
+
 .search-form {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -118,5 +191,19 @@ export default {
 .gallery-item img {
   max-width: 100%;
   border-radius: 8px;
+}
+
+.gallery-right ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.gallery-right li {
+  margin-bottom: 10px;
+}
+
+.selected {
+  font-weight: bold;
+  color: #4caf50;
 }
 </style>
