@@ -6,6 +6,8 @@
           <li><router-link to="/cropping">クリッピング</router-link></li>
           <li><router-link to="/">アップローダー</router-link></li>
           <li><router-link to="/gallery">ギャラリー</router-link></li>
+          <li><router-link to="/senjukou">せんじゅこう</router-link></li>
+
         </ul>
       </nav>
     </header>
