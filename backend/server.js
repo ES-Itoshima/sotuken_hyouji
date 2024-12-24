@@ -27,35 +27,83 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// タグ解析関数
+const parseTags = (filename) => {
+  const baseName = path.basename(filename, path.extname(filename));
+  const parts = baseName.split('_');
+  return {
+    level1: parts[0] || null,
+    level2: parts[1] || null,
+    level3: parts[2] || null,
+  };
+};
+
 // 画像アップロードエンドポイント
 app.post('/upload', upload.single('image'), (req, res) => {
-  const tags = req.body.tags;
   const filePath = req.file ? req.file.path : null;
 
-  if (!filePath || !tags) {
-    return res.status(400).json({ message: '画像またはタグが提供されていません' });
+  if (!filePath) {
+    return res.status(400).json({ message: '画像が提供されていません' });
   }
+
+  const tags = parseTags(req.file.filename);
 
   res.json({
     message: '画像が正常にアップロードされました',
-    tags: tags.split(',').map((tag) => tag.trim()),
-    filePath: `/uploads/${path.basename(filePath)}`, // クライアント用のパス
+    tags,
+    filePath: `/uploads/${path.basename(filePath)}`,
   });
 });
 
-// アップロードされた画像の一覧を取得
-app.get('/images', (req, res) => {
+app.get('/images/search', (req, res) => {
+  const { level1, level2, level3 } = req.query;
+
   fs.readdir(uploadDir, (err, files) => {
     if (err) {
       return res.status(500).json({ message: '画像リストの取得に失敗しました' });
     }
 
-    const images = files.map((file) => ({
-      name: file,
-      url: `http://localhost:3000/uploads/${file}`,
-    }));
+    const images = files
+      .map((file) => {
+        const tags = parseTags(file);
+        return {
+          name: file,
+          tags,
+          url: `http://localhost:3000/uploads/${file}`,
+        };
+      })
+      .filter((image) => {
+        return (
+          (!level1 || image.tags.level1 === level1) &&
+          (!level2 || image.tags.level2 === level2) &&
+          (!level3 || image.tags.level3 === level3)
+        );
+      });
 
     res.json(images);
+  });
+});
+
+// 全画像と階層化されたタグを取得
+app.get('/tags/hierarchy', (req, res) => {
+  fs.readdir(uploadDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ message: '画像リストの取得に失敗しました' });
+    }
+
+    const hierarchy = {};
+    files.forEach((file) => {
+      const tags = parseTags(file);
+      if (!tags.level1) return;
+
+      if (!hierarchy[tags.level1]) hierarchy[tags.level1] = {};
+      if (tags.level2) {
+        if (!hierarchy[tags.level1][tags.level2]) hierarchy[tags.level1][tags.level2] = [];
+        if (tags.level3) hierarchy[tags.level1][tags.level2].push(tags.level3);
+      }
+    });
+
+    res.json(hierarchy);
   });
 });
 

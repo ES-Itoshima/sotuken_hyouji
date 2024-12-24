@@ -4,6 +4,9 @@
     <form @submit.prevent="handleUpload">
       <input type="file" @change="handleFileChange" accept="image/*" />
       <input type="text" v-model="tags" placeholder="タグ (カンマ区切り)" />
+      <input type="text" v-model="year" placeholder="発行年" />
+      <input type="text" v-model="title" placeholder="タイトル" />
+      <input type="text" v-model="author" placeholder="作者" />
       <button type="submit">アップロード</button>
     </form>
     <div v-if="uploadResponse">
