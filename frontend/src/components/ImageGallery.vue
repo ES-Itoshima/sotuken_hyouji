@@ -28,7 +28,12 @@
 
         <!-- 画像表示 -->
         <div class="gallery">
-          <div v-for="image in images" :key="image.name" class="gallery-item">
+          <div 
+          v-for="image in images" 
+          :key="image.name" 
+          class="gallery-item"
+          @click="navigateToDetails(image.name)"
+          >
             <img :src="image.url" :alt="image.name" />
             <p>{{ image.name }}</p>
             <p>{{ image.tags.level1 }} > {{ image.tags.level2 }} > {{ image.tags.level3 }}</p>
@@ -69,6 +74,9 @@ export default {
     await this.fetchImages();
   },
   methods: {
+    navigateToDetails(imageName) {
+      this.$router.push({ name: 'ImageDetails', params: { name: imageName } });
+    },
     generateTagMarkdown(hierarchy, selectedTags) {
     const buildMarkdown = (level, prefix = '') => {
       let markdown = '';

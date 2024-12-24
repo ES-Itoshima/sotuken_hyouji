@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import ImageUploader from '../components/ImageUploader.vue';
 import ImageGallery from '../components/ImageGallery.vue';
 import Cropping from '../components/cropping.vue';
+import ImageDetails from '../components/ImageDetails.vue';
 
 
 const routes = [
@@ -19,6 +20,12 @@ const routes = [
     path: '/cropping',
     name: 'cropping',
     component: Cropping,
+  },
+  {
+    path: '/image/:name',
+    name: 'ImageDetails',
+    component: ImageDetails,
+    props: true, // パラメータをコンポーネントに渡す
   },
 ];
 
