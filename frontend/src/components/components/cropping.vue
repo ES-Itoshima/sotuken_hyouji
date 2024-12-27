@@ -65,7 +65,7 @@
   const props = defineProps({
     imageUrl: {
       type: String,
-      default: 'https://cdn.pixabay.com/photo/2023/03/25/09/51/cat-7875506_960_720.jpg'
+      default: 'https://publicdomainq.net/images/201906/22s/publicdomainq-0035692dzs.jpg'
     },
     width: {
       type: Number,
