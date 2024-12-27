@@ -7,19 +7,19 @@
 
         <!-- タグ検索フォーム -->
         <div class="search-form">
-          <label>レベル1:</label>
+          <label>テーマ:</label>
           <select v-model="searchTags.level1" @change="onLevel1Change">
             <option value="">-- 全て --</option>
             <option v-for="tag in level1Tags" :key="tag" :value="tag">{{ tag }}</option>
           </select>
 
-          <label>レベル2:</label>
+          <label>サブカテゴリ:</label>
           <select v-model="searchTags.level2" @change="onLevel2Change">
             <option value="">-- 全て --</option>
             <option v-for="tag in level2Tags" :key="tag" :value="tag">{{ tag }}</option>
           </select>
 
-          <label>レベル3:</label>
+          <label>詳細タグ:</label>
           <select v-model="searchTags.level3" @change="fetchImages">
             <option value="">-- 全て --</option>
             <option v-for="tag in level3Tags" :key="tag" :value="tag">{{ tag }}</option>
