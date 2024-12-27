@@ -4,12 +4,20 @@ import ImageGallery from '../components/ImageGallery.vue';
 import Cropping from '../components/cropping.vue';
 import ImageDetails from '../components/ImageDetails.vue';
 import senjukou from '../components/senjukou.vue';
+import gallery_intro from '../components/Introduce_Ga.vue';
+import route from '../components/route.vue';
+
 
 const routes = [
   {
     path: '/',
     name: 'Uploader',
     component: ImageUploader,
+  },
+  {
+    path: '/route',
+    name: 'route',
+    component: route,
   },
   {
     path: '/gallery',
@@ -25,6 +33,11 @@ const routes = [
     path: '/senjukou',
     name: 'senjukou',
     component: senjukou,
+  },
+  {
+    path: '/gallery_intro',
+    name: 'gyallery_intro',
+    component: gallery_intro,
   },
   {
     path: '/image/:name',
