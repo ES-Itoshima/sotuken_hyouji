@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>画像トリミングアプリケーション</h1>
+    <h1>画像クリッピングページ</h1>
     <ImageCropper 
       :image-url="selectedImage"
       :width="400"

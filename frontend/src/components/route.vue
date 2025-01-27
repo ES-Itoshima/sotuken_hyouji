@@ -11,13 +11,14 @@
         <div class="user-card researcher">
           <div class="card-content">
             <h2>研究者の方へ</h2>
-            <p>浮世絵研究のための高度な機能を提供しています。詳細な分析ツール、データセット管理、分析結果の可視化などをご利用いただけます。</p>
+            <p>浮世絵研究のための機能を提供しています。分析ツール、データセット管理、分析結果の可視化などをご利用いただけます。</p>
             <ul class="feature-list">
               <li>画像データの分類、整理機能</li>
-              <li>研究データのエクスポート機能</li>
+              <li>ギャラリー機能</li>
             </ul>
             <div class="action-buttons">
               <router-link to="/researcher/dashboard" class="button secondary">研究者ダッシュボード</router-link>
+              <router-link to="/gallery_intro" class="button primary">ギャラリーを閲覧</router-link>
             </div>
           </div>
         </div>

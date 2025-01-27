@@ -6,6 +6,8 @@ import ImageDetails from '../components/ImageDetails.vue';
 import senjukou from '../components/senjukou.vue';
 import gallery_intro from '../components/Introduce_Ga.vue';
 import route from '../components/route.vue';
+import Introduce_kenkyuu from '../components/introduce_kenkyuu.vue';
+
 
 
 const routes = [
@@ -13,6 +15,11 @@ const routes = [
     path: '/',
     name: 'Uploader',
     component: ImageUploader,
+  },
+  {
+    path: '/introkenkyu',
+    name: 'introkenkyu',
+    component: Introduce_kenkyuu,
   },
   {
     path: '/route',

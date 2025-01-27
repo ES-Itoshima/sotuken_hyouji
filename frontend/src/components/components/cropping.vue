@@ -11,20 +11,27 @@
         />
       </div>
       <div class="button-group">
-        <button @click="performCropping">トリミング</button>
+        <button @click="performCropping">クリッピング</button>
         <button 
           v-if="croppedImageUrl" 
           @click="downloadImage" 
           class="download-button"
         >
-          画像をダウンロード
+          次のクリッピング場所へ
         </button>
         <button 
           v-if="croppedImageUrl" 
           @click="downloadCoordinates" 
           class="coordinates-download-button"
         >
-          座標をダウンロード
+          アップロード
+        </button>
+        <button 
+          v-if="croppedImageUrl" 
+          @click="downloadCoordinates" 
+          class="reset-button"
+        >
+          リセット
         </button>
       </div>
       <div class="preview-container">
@@ -225,7 +232,7 @@
   
   button {
     padding: 10px 20px;
-    color: red;
+    color: black;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -235,6 +242,9 @@
     background-color: #2196F3;
   }
   
+  .reset-button {
+    background-color: #21f3bf;
+  }
   .download-button:hover {
     background-color: #1976D2;
   }

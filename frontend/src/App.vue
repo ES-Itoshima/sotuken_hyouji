@@ -9,6 +9,8 @@
           <li><router-link to="/gallery">ギャラリー</router-link></li>
           <li><router-link to="/gallery_intro">ギャラリー説明</router-link></li>
           <li><router-link to="/senjukou">せんじゅこう</router-link></li>
+          <li><router-link to="/introkenkyu">研究者イントロダクション</router-link></li>
+
 
         </ul>
       </nav>
